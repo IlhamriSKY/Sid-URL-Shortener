@@ -1,39 +1,44 @@
-const vscode = require('vscode');
+const vscode = require("vscode");
+const axios = require("axios");
 const { showAuthSettings } = require("./auth");
 const { showUrlManager } = require("./panel");
 
-/**
- * Activates the extension and registers commands.
- * @param {vscode.ExtensionContext} context - The extension context.
- */
 function activate(context) {
-    // Create a status bar item for the URL Manager
-    const statusBarItem = vscode.window.createStatusBarItem(
-        vscode.StatusBarAlignment.Right, 
-        100 // Higher priority to align right
-    );
+    // Create a status bar item for opening the URL Manager
+    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = "$(link) URL Manager"; // Icon and label for the status bar item
     statusBarItem.command = "extension.openUrlManager"; // Command to execute when clicked
-    statusBarItem.tooltip = "";
-    statusBarItem.show(); // Display the status bar item
+    statusBarItem.tooltip = "Fetching URL count..."; // Default tooltip
 
-    /**
-     * Command for opening authentication settings.
-     * Allows the user to configure their API credentials (X-Auth-Id and X-Auth-Key).
-     */
+    // Function to fetch the number of URLs created
+    const updateUrlCountTooltip = async () => {
+        try {
+            const { authId, authKey } = getAuthConfig();
+            if (authId && authKey) {
+                const urlCount = await getUrlCount(authId, authKey);
+                statusBarItem.tooltip = `Number of URLs created: ${urlCount}`; // Update tooltip
+            } else {
+                statusBarItem.tooltip = "Please set up authentication"; // Display message when no auth
+            }
+        } catch (error) {
+            statusBarItem.tooltip = "Failed to fetch URL count"; // Error message in tooltip
+        }
+    };
+
+    // Update the tooltip initially
+    updateUrlCountTooltip();
+    statusBarItem.show();
+
+    // Command for opening authentication settings
     const authCommand = vscode.commands.registerCommand("extension.openAuthSettings", async () => {
         await showAuthSettings();
     });
 
-    /**
-     * Command for opening the URL Manager.
-     * Verifies that the API credentials are configured before launching the URL Manager.
-     */
+    // Command for opening the URL Manager
     const urlManagerCommand = vscode.commands.registerCommand("extension.openUrlManager", async () => {
-        const { authId, authKey } = getAuthConfig(); // Retrieve API credentials
+        const { authId, authKey } = getAuthConfig();
 
         if (!authId || !authKey) {
-            // Prompt the user to configure credentials if missing
             vscode.window
                 .showErrorMessage(
                     "Please configure X-Auth-Id and X-Auth-Key first.",
@@ -45,19 +50,20 @@ function activate(context) {
                     }
                 });
         } else {
-            // Launch the URL Manager if credentials are present
             await showUrlManager(authId, authKey);
         }
     });
 
-    // Register commands and status bar item with the extension context
+    // Update the tooltip when the user opens the URL Manager
+    vscode.commands.registerCommand("extension.openUrlManager", async () => {
+        updateUrlCountTooltip();
+    });
+
+    // Add commands and status bar item to subscriptions
     context.subscriptions.push(authCommand, urlManagerCommand, statusBarItem);
 }
 
-/**
- * Retrieves authentication configuration from the workspace settings.
- * @returns {Object} - The authentication configuration containing `authId` and `authKey`.
- */
+// Function to get the current authentication settings
 function getAuthConfig() {
     const config = vscode.workspace.getConfiguration("urlShortener");
     return {
@@ -66,9 +72,21 @@ function getAuthConfig() {
     };
 }
 
-/**
- * Deactivates the extension (currently a placeholder).
- */
+// Function to fetch the URL count from the backend (example)
+async function getUrlCount(authId, authKey) {
+    try {
+        const response = await axios.get("https://api.s.id/v1/links?count_only=true", {
+            headers: {
+                "X-Auth-Id": authId,
+                "X-Auth-Key": authKey,
+            },
+        });
+        return response.data.total; // Return the total number of URLs
+    } catch (error) {
+        throw new Error("Failed to fetch URL count");
+    }
+}
+
 function deactivate() {}
 
 module.exports = {

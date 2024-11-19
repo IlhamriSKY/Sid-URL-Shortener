@@ -3,6 +3,7 @@
   "displayName": "SID URL Shortener",
   "description": "S.ID URL Shortener Generator",
   "version": "0.0.1",
+  "publisher": "ilhamriSKY",
   "engines": {
     "vscode": "^1.95.0"
   },

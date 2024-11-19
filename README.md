@@ -1,5 +1,10 @@
 # SID URL Shortener Extension
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-0.0.2-brightgreen.svg)
+
+![Demo](demo.png)
+
+
 This **SID URL Shortener** extension for Visual Studio Code allows you to generate short URLs using the S.ID API. With this extension, you can quickly create short links and manage them directly from within VS Code. The extension requires authentication through the **S.ID API**, and you must provide your **X-Auth-Id** and **X-Auth-Key** to interact with the API.
 
 ## Features
@@ -36,7 +41,7 @@ To use the SID URL Shortener extension, you will need an **X-Auth-Id** and **X-A
 
 After installing the extension, follow these steps to enter your credentials:
 
-1. Open the **Command Palette** in VS Code (`Ctrl+Shift+P` or `Cmd+Shift+P`).
+1. Open the **Command Palette** in VS Code (`Ctrl+Shift+P` or `Cmd+Shift+P`) or click shortcut icon at button right corner.
 2. Type `S.ID: Set Auth Credentials` and select it.
 3. Enter your **X-Auth-Id** and **X-Auth-Key** in the prompted input boxes.
 
