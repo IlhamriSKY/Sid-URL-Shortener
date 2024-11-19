@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.2] - 2024-11-19
+### Added
+- Add demo
+
 ## [0.0.1] - 2024-11-19
 ### Added
 - Initial release of the **SID URL Shortener** extension for Visual Studio Code.
