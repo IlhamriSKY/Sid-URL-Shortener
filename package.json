@@ -1,0 +1,68 @@
+{
+  "name": "sid-url-shortener",
+  "displayName": "SID URL Shortener",
+  "description": "S.ID URL Shortener Generator",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:sid-url-shortener.openAuthSettings",
+    "onCommand:sid-url-shortener.openUrlManager",
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.bundle.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "URL Shortener Settings",
+      "properties": {
+        "urlShortener.authId": {
+          "type": "string",
+          "default": "",
+          "description": "X-Auth-Id for S.id API"
+        },
+        "urlShortener.authKey": {
+          "type": "string",
+          "default": "",
+          "description": "X-Auth-Key for S.id API"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch --config webpack.config.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.95.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "babel-loader": "^9.2.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^9.13.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "sid-url-shortener": "file:"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilhamrisky/Sid-URL-Shortener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ilhamrisky/Sid-URL-Shortener/issues"
+  },
+  "license": "MIT",
+  "icon": "resources/icon.jpg"
+}

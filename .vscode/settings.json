@@ -1,0 +1,5 @@
+{
+    "javascript.validate.enable": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true
+}
